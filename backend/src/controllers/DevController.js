@@ -13,8 +13,12 @@ module.exports = {
 
     async store(request, response) {
         console.log(request.body);
-        const { github_username, techs, latitude, longitude } = request.body;
+        const { github_username, techs, zipCode } = request.body;
 
+        const zipCodeApiResponse = await axios.get(`http://www.cepaberto.com/api/v3/cep?cep=${zipCode}`, { headers: { "Authorization": "Token token=YOUR_AUTHORIZATION, TOKEN" } })
+        const latitude = zipCodeApiResponse.data.latitude;
+        const longitude = zipCodeApiResponse.data.longitude;
+        
         let dev = await Dev.findOne({ github_username });
     
         if (!dev) {
